@@ -3,3 +3,6 @@
 
 # Игнорировать директорию .github
 .github/
+
+# Игнорировать другие файлы .gitignore
+.gitignore
