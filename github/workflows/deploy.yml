@@ -1,1 +1,26 @@
+name: Deploy Single Page to S3
 
+on:
+  push:
+    branches:
+      - main  # Запускать процесс при пуше в ветку main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone single-page repository
+        run: |
+          git clone https://github.com/devopsfabric/single-page.git .
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Deploy to S3
+        run: |
+          aws s3 sync . s3://my-static-bucket-jaxy --exclude ".git/*" --delete
