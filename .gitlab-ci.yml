@@ -1,0 +1,21 @@
+stages:
+  - clone
+  - deploy
+
+clone:
+  stage: clone
+  script:
+    - git clone https://github.com/devopsfabric/single-page.git .
+  only:
+    - main
+
+deploy:
+  stage: deploy
+  image: amazon/aws-cli  # Используем образ AWS CLI
+  script:
+    - aws s3 sync . s3://my-static-bucket-jaxy --exclude ".git/*" --delete
+  only:
+    - main
+  environment:
+    name: production
+    url: http://my-static-bucket-jaxy.s3-website-us-east-1.amazonaws.com
